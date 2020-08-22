@@ -13,12 +13,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Talk to dialogflow',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Talk to dialogflow'),
     );
   }
 }
@@ -37,13 +37,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
 
   final ChatUser user = ChatUser(
-    name: "Fayeed",
+    name: "User",
     uid: "123456789",
     avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
   );
 
   final ChatUser otherUser = ChatUser(
-    name: "Mrfatty",
+    name: "Customer support",
     uid: "25649654",
   );
 
