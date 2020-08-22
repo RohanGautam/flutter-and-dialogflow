@@ -38,6 +38,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  authenticateDialogflow() async {
+    AuthGoogle authGoogle = await AuthGoogle(
+            fileJson: "assets/keys/playground-bgueyq-c6b2f206294a.json")
+        .build();
+    Dialogflow dialogflow =
+        Dialogflow(authGoogle: authGoogle, language: Language.english);
+    AIResponse response = await dialogflow.detectIntent("beans");
+    print(response.getMessage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,10 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('call dialogflow'),
+        onPressed: () => authenticateDialogflow(),
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        icon: Icon(Icons.call),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
