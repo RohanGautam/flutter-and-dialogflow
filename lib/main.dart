@@ -31,6 +31,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  Dialogflow dialogflow;
 
   void _incrementCounter() {
     setState(() {
@@ -38,14 +39,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  initState() {
+    authenticateDialogflow();
+  }
+
   authenticateDialogflow() async {
     AuthGoogle authGoogle = await AuthGoogle(
             fileJson: "assets/keys/playground-bgueyq-c6b2f206294a.json")
         .build();
-    Dialogflow dialogflow =
-        Dialogflow(authGoogle: authGoogle, language: Language.english);
-    AIResponse response = await dialogflow.detectIntent("beans");
-    print(response.getMessage());
+    dialogflow = Dialogflow(authGoogle: authGoogle, language: Language.english);
+    // print(await sendMessage("beans"));
+  }
+
+  Future<String> sendMessage(String message) async {
+    AIResponse response = await dialogflow.detectIntent(message);
+    return response.getMessage();
   }
 
   @override
