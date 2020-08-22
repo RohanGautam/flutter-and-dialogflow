@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
+import 'package:dash_chat/dash_chat.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,16 +33,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   Dialogflow dialogflow;
+  final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  final ChatUser user = ChatUser(
+    name: "Fayeed",
+    uid: "123456789",
+    avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
+  );
+
+  final ChatUser otherUser = ChatUser(
+    name: "Mrfatty",
+    uid: "25649654",
+  );
+
+  List<ChatMessage> messages = List<ChatMessage>();
+  var m = List<ChatMessage>();
 
   initState() {
+    super.initState();
     authenticateDialogflow();
   }
 
@@ -51,9 +63,19 @@ class _MyHomePageState extends State<MyHomePage> {
     // print(await sendMessage("beans"));
   }
 
-  Future<String> sendMessage(String message) async {
-    AIResponse response = await dialogflow.detectIntent(message);
-    return response.getMessage();
+  void sendMessage(ChatMessage message) async {
+    // show the users message
+    setState(() {
+      messages.add(message);
+    });
+    print(message.toJson());
+    AIResponse response = await dialogflow.detectIntent(message.text);
+    String resp = response.getMessage();
+    // show the response message
+    setState(() {
+      messages.add(
+          ChatMessage(text: resp, createdAt: DateTime.now(), user: otherUser));
+    });
   }
 
   @override
@@ -64,28 +86,68 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      body: DashChat(
+        key: _chatViewKey,
+        inverted: false,
+        onSend: sendMessage,
+        sendOnEnter: true,
+        textInputAction: TextInputAction.send,
+        user: user,
+        inputDecoration:
+            InputDecoration.collapsed(hintText: "Add message here..."),
+        dateFormat: DateFormat('yyyy-MMM-dd'),
+        timeFormat: DateFormat('HH:mm'),
+        messages: messages,
+        showUserAvatar: false,
+        showAvatarForEveryMessage: false,
+        scrollToBottom: false,
+        onPressAvatar: (ChatUser user) {
+          print("OnPressAvatar: ${user.name}");
+        },
+        onLongPressAvatar: (ChatUser user) {
+          print("OnLongPressAvatar: ${user.name}");
+        },
+        inputMaxLines: 5,
+        messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
+        alwaysShowSend: true,
+        inputTextStyle: TextStyle(fontSize: 16.0),
+        inputContainerStyle: BoxDecoration(
+          border: Border.all(width: 0.0),
+          color: Colors.white,
         ),
+        onQuickReply: (Reply reply) {
+          setState(() {
+            messages.add(ChatMessage(
+                text: reply.value, createdAt: DateTime.now(), user: user));
+
+            messages = [...messages];
+          });
+
+          Timer(Duration(milliseconds: 300), () {
+            _chatViewKey.currentState.scrollController
+              ..animateTo(
+                _chatViewKey
+                    .currentState.scrollController.position.maxScrollExtent,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 300),
+              );
+
+            // if (i == 0) {
+            //   systemMessage();
+            //   Timer(Duration(milliseconds: 600), () {
+            //     systemMessage();
+            //   });
+            // } else {
+            //   systemMessage();
+            // }
+          });
+        },
+        onLoadEarlier: () {
+          print("laoding...");
+        },
+        shouldShowLoadEarlier: false,
+        showTraillingBeforeSend: true,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('call dialogflow'),
-        onPressed: () => authenticateDialogflow(),
-        tooltip: 'Increment',
-        icon: Icon(Icons.call),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
