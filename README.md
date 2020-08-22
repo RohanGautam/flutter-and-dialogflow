@@ -1,7 +1,8 @@
 # chatbot
 
+Put the service key json file associated with your dialogflow project in `assets/keys` and update the pubspec.
+
 - [flutter-dialogflow](https://github.com/VictorRancesCode/flutter_dialogflow)
--
 
 A new Flutter project.
 
