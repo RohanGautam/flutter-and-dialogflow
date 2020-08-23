@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 // external package imports
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 import 'package:dash_chat/dash_chat.dart';
-import 'package:splashscreen/splashscreen.dart';
 import 'package:uuid/uuid.dart';
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/line_scale_indicator.dart';
 
 void main() {
   runApp(MyApp());
@@ -68,18 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getLoadingScreen() {
-    return SplashScreen(
-        seconds: 14,
-        image: Image.asset('assets/chatbot.png'),
-        title: new Text(
-          'Loading chatbot..',
-          style: TextStyle(fontSize: 35),
-        ),
-        // image: new Image.asset('screenshot.png'),
-        backgroundColor: Colors.white,
-        styleTextUnderTheLoader: new TextStyle(),
-        photoSize: 100.0,
-        loaderColor: Colors.red);
+    return Center(
+      child: Loading(
+          indicator: LineScaleIndicator(),
+          color: Theme.of(context).accentColor,
+          size: 100.0),
+    );
   }
 
   void sendMessage(ChatMessage message) async {
