@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Talk to dialogflow'),
+      home: MyHomePage(title: 'Talk to dialogflow ⚡'),
     );
   }
 }
@@ -121,8 +121,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 onLongPressAvatar: (ChatUser user) {
                   print("OnLongPressAvatar: ${user.name}");
                 },
-                messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
                 alwaysShowSend: true,
+                // format how the messages look
+                messageDecorationBuilder: (_, isUser) {
+                  return BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: isUser
+                          ? Theme.of(context).accentColor
+                          : Colors.grey[200]);
+                },
+                // input configurations
                 textInputAction: TextInputAction.send,
                 inputMaxLines: 5,
                 inputDecoration:
@@ -132,11 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey[300],
                 ),
-                onLoadEarlier: () {
-                  print("loading...");
-                },
-                shouldShowLoadEarlier: false,
-                showTraillingBeforeSend: true,
               ),
             ),
     );
