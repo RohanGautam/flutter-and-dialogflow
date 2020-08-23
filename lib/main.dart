@@ -100,40 +100,43 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: dialogflow == null
           ? getLoadingScreen()
-          : DashChat(
-              key: _chatViewKey,
-              inverted: false,
-              onSend: sendMessage,
-              sendOnEnter: true,
-              textInputAction: TextInputAction.send,
-              user: user,
-              inputDecoration:
-                  InputDecoration.collapsed(hintText: "Add message here..."),
-              dateFormat: DateFormat('yyyy-MMM-dd'),
-              timeFormat: DateFormat('HH:mm'),
-              messages: messages,
-              showUserAvatar: false,
-              showAvatarForEveryMessage: false,
-              scrollToBottom: false,
-              onPressAvatar: (ChatUser user) {
-                print("OnPressAvatar: ${user.name}");
-              },
-              onLongPressAvatar: (ChatUser user) {
-                print("OnLongPressAvatar: ${user.name}");
-              },
-              inputMaxLines: 5,
-              messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
-              alwaysShowSend: true,
-              inputTextStyle: TextStyle(fontSize: 16.0),
-              inputContainerStyle: BoxDecoration(
-                border: Border.all(width: 0.0),
-                color: Colors.white,
+          : Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: DashChat(
+                key: _chatViewKey,
+                inverted: false,
+                onSend: sendMessage,
+                sendOnEnter: true,
+                user: user,
+                dateFormat: DateFormat('yyyy-MMM-dd'),
+                timeFormat: DateFormat('HH:mm'),
+                messages: messages,
+                showUserAvatar: false,
+                showAvatarForEveryMessage: false,
+                scrollToBottom: false,
+                onPressAvatar: (ChatUser user) {
+                  print("OnPressAvatar: ${user.name}");
+                },
+                onLongPressAvatar: (ChatUser user) {
+                  print("OnLongPressAvatar: ${user.name}");
+                },
+                messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
+                alwaysShowSend: true,
+                textInputAction: TextInputAction.send,
+                inputMaxLines: 5,
+                inputDecoration:
+                    InputDecoration.collapsed(hintText: "Add message here..."),
+                inputTextStyle: TextStyle(fontSize: 16.0),
+                inputContainerStyle: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.grey[300],
+                ),
+                onLoadEarlier: () {
+                  print("loading...");
+                },
+                shouldShowLoadEarlier: false,
+                showTraillingBeforeSend: true,
               ),
-              onLoadEarlier: () {
-                print("loading...");
-              },
-              shouldShowLoadEarlier: false,
-              showTraillingBeforeSend: true,
             ),
     );
   }
