@@ -101,7 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: dialogflow == null
           ? getLoadingScreen()
           : Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              // padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(8),
               child: DashChat(
                 key: _chatViewKey,
                 inverted: false,
