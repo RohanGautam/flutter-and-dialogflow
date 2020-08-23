@@ -1,8 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+// external package imports
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 import 'package:dash_chat/dash_chat.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,15 +36,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Dialogflow dialogflow;
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
 
-  final ChatUser user = ChatUser(
+  ChatUser user = ChatUser(
     name: "User",
-    uid: "123456789",
-    avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
+    uid: Uuid().v4(),
   );
 
   final ChatUser otherUser = ChatUser(
     name: "Customer support",
-    uid: "25649654",
+    uid: Uuid().v4(),
+    avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
   );
 
   List<ChatMessage> messages = List<ChatMessage>();
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       messages.add(message);
     });
-    print(message.toJson());
+    print(message.toJson()); // for debugging
     AIResponse response = await dialogflow.detectIntent(message.text);
     String resp = response.getMessage();
     // show the response message
@@ -113,33 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
           border: Border.all(width: 0.0),
           color: Colors.white,
         ),
-        onQuickReply: (Reply reply) {
-          setState(() {
-            messages.add(ChatMessage(
-                text: reply.value, createdAt: DateTime.now(), user: user));
-
-            messages = [...messages];
-          });
-
-          Timer(Duration(milliseconds: 300), () {
-            _chatViewKey.currentState.scrollController
-              ..animateTo(
-                _chatViewKey
-                    .currentState.scrollController.position.maxScrollExtent,
-                curve: Curves.easeOut,
-                duration: const Duration(milliseconds: 300),
-              );
-
-            // if (i == 0) {
-            //   systemMessage();
-            //   Timer(Duration(milliseconds: 600), () {
-            //     systemMessage();
-            //   });
-            // } else {
-            //   systemMessage();
-            // }
-          });
-        },
         onLoadEarlier: () {
           print("loading...");
         },
