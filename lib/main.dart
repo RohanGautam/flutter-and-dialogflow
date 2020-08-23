@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // external package imports
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 import 'package:dash_chat/dash_chat.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -59,8 +60,26 @@ class _MyHomePageState extends State<MyHomePage> {
     AuthGoogle authGoogle = await AuthGoogle(
             fileJson: "assets/keys/playground-bgueyq-c6b2f206294a.json")
         .build();
-    dialogflow = Dialogflow(authGoogle: authGoogle, language: Language.english);
+    setState(() {
+      dialogflow =
+          Dialogflow(authGoogle: authGoogle, language: Language.english);
+    });
     // print(await sendMessage("beans"));
+  }
+
+  Widget getLoadingScreen() {
+    return SplashScreen(
+        seconds: 14,
+        image: Image.asset('assets/chatbot.png'),
+        title: new Text(
+          'Loading chatbot..',
+          style: TextStyle(fontSize: 35),
+        ),
+        // image: new Image.asset('screenshot.png'),
+        backgroundColor: Colors.white,
+        styleTextUnderTheLoader: new TextStyle(),
+        photoSize: 100.0,
+        loaderColor: Colors.red);
   }
 
   void sendMessage(ChatMessage message) async {
@@ -84,41 +103,43 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: DashChat(
-        key: _chatViewKey,
-        inverted: false,
-        onSend: sendMessage,
-        sendOnEnter: true,
-        textInputAction: TextInputAction.send,
-        user: user,
-        inputDecoration:
-            InputDecoration.collapsed(hintText: "Add message here..."),
-        dateFormat: DateFormat('yyyy-MMM-dd'),
-        timeFormat: DateFormat('HH:mm'),
-        messages: messages,
-        showUserAvatar: false,
-        showAvatarForEveryMessage: false,
-        scrollToBottom: false,
-        onPressAvatar: (ChatUser user) {
-          print("OnPressAvatar: ${user.name}");
-        },
-        onLongPressAvatar: (ChatUser user) {
-          print("OnLongPressAvatar: ${user.name}");
-        },
-        inputMaxLines: 5,
-        messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
-        alwaysShowSend: true,
-        inputTextStyle: TextStyle(fontSize: 16.0),
-        inputContainerStyle: BoxDecoration(
-          border: Border.all(width: 0.0),
-          color: Colors.white,
-        ),
-        onLoadEarlier: () {
-          print("loading...");
-        },
-        shouldShowLoadEarlier: false,
-        showTraillingBeforeSend: true,
-      ),
+      body: dialogflow == null
+          ? getLoadingScreen()
+          : DashChat(
+              key: _chatViewKey,
+              inverted: false,
+              onSend: sendMessage,
+              sendOnEnter: true,
+              textInputAction: TextInputAction.send,
+              user: user,
+              inputDecoration:
+                  InputDecoration.collapsed(hintText: "Add message here..."),
+              dateFormat: DateFormat('yyyy-MMM-dd'),
+              timeFormat: DateFormat('HH:mm'),
+              messages: messages,
+              showUserAvatar: false,
+              showAvatarForEveryMessage: false,
+              scrollToBottom: false,
+              onPressAvatar: (ChatUser user) {
+                print("OnPressAvatar: ${user.name}");
+              },
+              onLongPressAvatar: (ChatUser user) {
+                print("OnLongPressAvatar: ${user.name}");
+              },
+              inputMaxLines: 5,
+              messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
+              alwaysShowSend: true,
+              inputTextStyle: TextStyle(fontSize: 16.0),
+              inputContainerStyle: BoxDecoration(
+                border: Border.all(width: 0.0),
+                color: Colors.white,
+              ),
+              onLoadEarlier: () {
+                print("loading...");
+              },
+              shouldShowLoadEarlier: false,
+              showTraillingBeforeSend: true,
+            ),
     );
   }
 }
