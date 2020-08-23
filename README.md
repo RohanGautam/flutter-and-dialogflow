@@ -1,20 +1,5 @@
-# chatbot
+# flutter and dialogflow chatbot
 
-Put the service key json file associated with your dialogflow project in `assets/keys` and update the pubspec.
-
+Put the service key json file associated with your dialogflow project in `assets/keys` and update the `pubspec.yaml` and the `main.dart` file where the json file is loaded.
+Detailed instructions of getting the service key json file are in the readme of the link below.
 - [flutter-dialogflow](https://github.com/VictorRancesCode/flutter_dialogflow)
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
